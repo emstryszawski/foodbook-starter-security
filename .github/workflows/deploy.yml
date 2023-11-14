@@ -21,11 +21,50 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set up Maven settings
+        uses: whelk-io/maven-settings-xml-action@v21
+        with:
+          repositories: >
+            [
+              {
+                "id": "github",
+                "name": "GitHub emstryszawski Apache Maven Packages",
+                "url": "https://maven.pkg.github.com/emstryszawski/*",
+                "releases": {
+                  "enabled": "true",
+                  "updatePolicy": "always",
+                  "checksumPolicy": "fail"
+                },
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always",
+                  "checksumPolicy": "fail"
+                }
+              }
+            ]
+          servers: >
+            [
+              {
+                "id": "github",
+                "configuration": {
+                  "httpHeaders": {
+                    "property": {
+                      "name": "Authorization",
+                      "value": "Bearer ${{ secrets.GITHUB_TOKEN }}"
+                    }
+                  }
+                }
+              }
+            ]
+          output_file: settings.xml
+
       - name: Test
-        run: mvn test
+        run: mvn test --settings settings.xml
+        continue-on-error: false
 
       - name: Build
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml --settings settings.xml
+        continue-on-error: false
 
       - name: Publish to GitHub Packages Apache Maven
         run: mvn --batch-mode deploy
