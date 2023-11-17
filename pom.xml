@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.foodbook.api</groupId>
         <artifactId>foodbook-starter</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
         <relativePath/>
     </parent>
 
     <artifactId>foodbook-starter-security</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 
     <distributionManagement>
         <repository>
